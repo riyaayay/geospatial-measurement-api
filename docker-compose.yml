@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_USER: geo
+      POSTGRES_PASSWORD: geo
+      POSTGRES_DB: geo
+    ports:
+      # 55432 rather than 5432 so it doesn't clash with a locally installed Postgres
+      - "55432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Runs once, on first start with an empty volume, after the image's own 10_postgis.sh
+      - ./docker/initdb/20_test_db.sql:/docker-entrypoint-initdb.d/20_test_db.sql:ro
+    healthcheck:
+      # Query geo_test rather than pg_isready: during first-time init a temporary server already
+      # answers pg_isready before our 20_test_db.sql has run.
+      test: ["CMD-SHELL", "psql -U geo -d geo_test -tAc 'SELECT postgis_version()'"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
