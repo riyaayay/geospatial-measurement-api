@@ -472,7 +472,6 @@ Each decision, with context, options and trade-offs, is in [DECISIONS.md](DECISI
 ## Learning and Future Scope
 
 ### What I learned
-*(Draft: to be rewritten by Riya in her own words.)*
 
 - **Coordinates are angles, not distances.** Measuring in lon/lat is meaningless. Every projection trades off area,
   shape and distance, so the right one depends on what you measure. For area, an equal-area projection centred on the
